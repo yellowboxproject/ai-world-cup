@@ -37,3 +37,4 @@ npm run start
 - Add real generated portraits to `public/models`
 - Add API routes for voting and live rankings
 - Add motion-rich intros and AI-generated match posters/videos
+.
