@@ -1,40 +1,21 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Nation } from "@/lib/types";
 
 export function HeroSection() {
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 text-center">
-      <div className="absolute inset-0">
-        <Image
-          src="/models/hero-banner.png"
-          alt="AI Model World Cup cinematic stadium hero"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-      </div>
-      <div className="absolute inset-0 bg-black/60" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.18),transparent_42%),linear-gradient(to_bottom,rgba(0,0,0,0.25),rgba(0,0,0,0.88))]" />
-      <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-black to-transparent" />
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="relative z-10 mx-auto max-w-6xl space-y-6 pt-20"
-      >
-        <p className="text-xs uppercase tracking-[0.4em] text-luxuryGold drop-shadow-[0_0_18px_rgba(212,175,55,0.9)]">
-          Global Tournament 2026
-        </p>
-        <h1 className="text-5xl font-black uppercase leading-[0.9] text-white drop-shadow-[0_0_30px_rgba(0,0,0,0.9)] md:text-8xl">
-          AI Model World Cup
-        </h1>
-        <p className="text-lg text-zinc-100 drop-shadow md:text-2xl">48 Nations. 48 Queens. One Dream.</p>
-      </motion.div>
+    <section className="relative min-h-screen overflow-hidden">
+      <Image
+        src="/models/hero-banner.png"
+        alt="AI Model World Cup cinematic stadium hero"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
+      />
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent" />
     </section>
   );
 }
