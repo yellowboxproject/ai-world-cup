@@ -6,16 +6,18 @@ import { Nation } from "@/lib/types";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen overflow-hidden">
-      <Image
-        src="/models/hero-banner.png"
-        alt="AI Model World Cup cinematic stadium hero"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent" />
+    <section className="relative w-full overflow-hidden bg-black">
+      <div className="relative mx-auto aspect-[16/9] w-full max-w-[1920px] md:min-h-screen">
+        <Image
+          src="/models/hero-banner.png"
+          alt="AI Model World Cup cinematic stadium hero"
+          fill
+          priority
+          sizes="100vw"
+          className="object-contain object-center md:object-cover"
+        />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent md:h-32" />
+      </div>
     </section>
   );
 }
