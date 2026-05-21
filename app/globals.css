@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-pitchBlack text-white antialiased;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(212, 175, 55, 0.12), transparent 35%),
+    radial-gradient(circle at 80% 5%, rgba(255, 122, 24, 0.2), transparent 45%),
+    linear-gradient(180deg, #040404 0%, #0b0b0b 60%, #050505 100%);
+}
+
+.gold-outline {
+  border: 1px solid rgba(212, 175, 55, 0.5);
+}
