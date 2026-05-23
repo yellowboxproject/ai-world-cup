@@ -17,16 +17,8 @@ export function HeroSection() {
           className="object-contain object-center md:object-cover"
         />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent md:h-32" />
-        <Link
-          href="/groups"
-          aria-label="Enter the tournament"
-          className="absolute left-[13%] top-[76%] z-20 h-[8%] w-[18%] rounded-full outline-none transition hover:bg-luxuryGold/10 focus-visible:ring-2 focus-visible:ring-luxuryGold"
-        />
-        <Link
-          href="/matchups"
-          aria-label="View matchups"
-          className="absolute left-[33%] top-[76%] z-20 h-[8%] w-[16%] rounded-full outline-none transition hover:bg-luxuryGold/10 focus-visible:ring-2 focus-visible:ring-luxuryGold"
-        />
+        <Link href="/groups" aria-label="Enter the tournament" className="absolute left-[13%] top-[76%] z-20 h-[8%] w-[18%] rounded-full outline-none transition hover:bg-luxuryGold/10 focus-visible:ring-2 focus-visible:ring-luxuryGold" />
+        <Link href="/matchups" aria-label="View matchups" className="absolute left-[33%] top-[76%] z-20 h-[8%] w-[16%] rounded-full outline-none transition hover:bg-luxuryGold/10 focus-visible:ring-2 focus-visible:ring-luxuryGold" />
       </div>
     </section>
   );
@@ -37,9 +29,7 @@ export function NationCard({ nation }: { nation: Nation }) {
     <Link href="/models" className="block transition hover:-translate-y-1 hover:opacity-95">
       <article className="gold-outline overflow-hidden rounded-2xl bg-zinc-900/70 shadow-glow cursor-pointer">
         <div className="relative h-64 bg-zinc-950">
-          {nation.image ? (
-            <Image src={nation.image} alt={`${nation.modelName} — ${nation.country}`} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover object-top" />
-          ) : null}
+          {nation.image ? <Image src={nation.image} alt={`${nation.modelName} — ${nation.country}`} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover object-top" /> : null}
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black to-transparent" />
           <div className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-2xl backdrop-blur">{nation.flag}</div>
         </div>
@@ -53,26 +43,31 @@ export function NationCard({ nation }: { nation: Nation }) {
   );
 }
 
+function MatchModelPanel({ team }: { team: Nation }) {
+  return (
+    <div className="relative h-80 min-w-0 overflow-hidden bg-zinc-950">
+      {team.image ? <Image src={team.image} alt={`${team.modelName} — ${team.country}`} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover object-top" /> : null}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+      <div className="absolute bottom-5 left-5 right-5">
+        <p className="text-3xl">{team.flag}</p>
+        <h3 className="text-3xl font-black uppercase tracking-wide text-white">{team.modelName}</h3>
+        <p className="text-luxuryGold">{team.country}</p>
+      </div>
+    </div>
+  );
+}
+
 export function MatchCard({ home, away }: { home: Nation; away: Nation }) {
   return (
-    <article className="gold-outline overflow-hidden rounded-3xl bg-black/70 p-0">
-      <div className="grid md:grid-cols-[1fr_auto_1fr]">
-        {[home, away].map((team) => (
-          <div key={team.country} className="relative h-80 bg-zinc-950">
-            {team.image ? <Image src={team.image} alt={team.modelName} fill sizes="(max-width: 768px) 100vw, 40vw" className="object-cover object-top" /> : null}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-            <div className="absolute bottom-5 left-5">
-              <p className="text-3xl">{team.flag}</p>
-              <h3 className="text-3xl font-black uppercase">{team.modelName}</h3>
-              <p className="text-luxuryGold">{team.country}</p>
-            </div>
-          </div>
-        ))}
-        <div className="grid place-content-center bg-black px-5 py-6 text-center md:-order-none md:px-8">
+    <article className="gold-outline overflow-hidden rounded-3xl bg-black/80 p-0">
+      <div className="grid md:grid-cols-[1fr_160px_1fr]">
+        <MatchModelPanel team={home} />
+        <div className="grid place-content-center bg-black px-5 py-6 text-center">
           <p className="text-xs uppercase tracking-widest text-luxuryGold">Group Stage</p>
           <p className="my-3 text-3xl font-black">VS</p>
           <button onClick={() => alert("Fan voting coming soon")} className="rounded-full bg-gold-gradient px-5 py-2 text-sm font-bold text-black transition hover:scale-105">Vote Now</button>
         </div>
+        <MatchModelPanel team={away} />
       </div>
     </article>
   );
