@@ -134,11 +134,12 @@ function enrichAndSort(data: Nation[], voteTotals: Record<string, number>) {
 
 export function HeroSection() {
   return (
-    <section className="relative w-full overflow-hidden bg-black">
-      <div className="relative mx-auto h-[560px] w-full max-w-[1920px] sm:h-[620px] md:h-auto md:min-h-screen">
-        <Image src="/models/hero-banner.png" alt="AI Model World Cup cinematic stadium hero" fill priority sizes="100vw" className="object-cover object-[58%_center] md:object-center" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/10 to-black md:bg-transparent" />
-        <div className="absolute inset-x-4 bottom-5 z-20 rounded-[1.7rem] border border-luxuryGold/35 bg-black/78 p-4 shadow-2xl backdrop-blur-md md:hidden">
+    <section className="w-full overflow-hidden bg-black">
+      <div className="md:hidden">
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-black">
+          <Image src="/models/hero-banner.png" alt="AI Model World Cup cinematic stadium hero" fill priority sizes="100vw" className="object-contain object-center" />
+        </div>
+        <div className="mx-4 -mt-3 relative z-20 rounded-[1.7rem] border border-luxuryGold/35 bg-black/90 p-4 shadow-2xl backdrop-blur-md">
           <p className="text-[10px] font-bold uppercase tracking-[0.34em] text-luxuryGold">AI Model World Cup</p>
           <h1 className="mt-2 text-[2rem] font-black uppercase leading-[0.95]">Vote your champion</h1>
           <p className="mt-2 text-sm text-zinc-300">48 models. 12 groups. Live fan rankings.</p>
@@ -147,9 +148,12 @@ export function HeroSection() {
             <Link href="/ranking" className="rounded-2xl border border-luxuryGold/70 px-4 py-3 text-center text-xs font-black uppercase tracking-widest text-luxuryGold">Rankings</Link>
           </div>
         </div>
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black to-transparent md:h-32" />
-        <Link href="/groups" aria-label="Enter the tournament" className="absolute left-[13%] top-[76%] z-20 hidden h-[8%] w-[18%] rounded-full outline-none transition hover:bg-luxuryGold/10 focus-visible:ring-2 focus-visible:ring-luxuryGold md:block" />
-        <Link href="/matchups" aria-label="View matchups" className="absolute left-[33%] top-[76%] z-20 hidden h-[8%] w-[16%] rounded-full outline-none transition hover:bg-luxuryGold/10 focus-visible:ring-2 focus-visible:ring-luxuryGold md:block" />
+      </div>
+      <div className="relative mx-auto hidden w-full max-w-[1920px] md:block md:min-h-screen">
+        <Image src="/models/hero-banner.png" alt="AI Model World Cup cinematic stadium hero" fill priority sizes="100vw" className="object-cover object-center" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 to-transparent" />
+        <Link href="/groups" aria-label="Enter the tournament" className="absolute left-[13%] top-[76%] z-20 h-[8%] w-[18%] rounded-full outline-none transition hover:bg-luxuryGold/10 focus-visible:ring-2 focus-visible:ring-luxuryGold" />
+        <Link href="/matchups" aria-label="View matchups" className="absolute left-[33%] top-[76%] z-20 h-[8%] w-[16%] rounded-full outline-none transition hover:bg-luxuryGold/10 focus-visible:ring-2 focus-visible:ring-luxuryGold" />
       </div>
     </section>
   );
