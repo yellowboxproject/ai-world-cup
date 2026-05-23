@@ -29,17 +29,17 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:py-4">
-        <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-2 text-lg font-black tracking-widest text-luxuryGold">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/85 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 md:py-4">
+        <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base font-black tracking-widest text-luxuryGold md:text-lg">
           <Trophy size={18} /> AIWC
         </Link>
-        <Link href="/matchups" className="rounded-full bg-gold-gradient px-4 py-2 text-xs font-black uppercase tracking-widest text-black md:hidden">
-          Vote
-        </Link>
-        <button className="rounded-full border border-white/15 p-2 md:hidden" onClick={() => setOpen((v) => !v)} aria-label="Open menu">
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <a href={instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram" className="grid h-10 w-10 place-items-center rounded-full border border-white/10 text-zinc-200"><Instagram size={17} /></a>
+          <button className="grid h-10 w-10 place-items-center rounded-full border border-white/15" onClick={() => setOpen((v) => !v)} aria-label="Open menu">
+            {open ? <X size={21} /> : <Menu size={21} />}
+          </button>
+        </div>
         <nav className="hidden items-center gap-6 md:flex">
           {nav.map((item) => (
             <Link key={item.href} href={item.href} className={`text-sm uppercase tracking-wider transition hover:text-luxuryGold ${pathname === item.href ? "text-luxuryGold" : "text-zinc-200"}`}>
