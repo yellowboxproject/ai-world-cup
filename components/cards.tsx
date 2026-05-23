@@ -258,11 +258,34 @@ function VotingControls({ home, away }: { home: Nation; away: Nation }) {
 export function MatchCard({ home, away }: { home: Nation; away: Nation }) {
   return (
     <article className="gold-outline overflow-hidden rounded-3xl bg-black/80 p-0 shadow-glow">
-      <div className="grid grid-cols-2 md:grid-cols-[1fr_190px_1fr]">
+      <div className="md:hidden">
+        <div className="flex items-center justify-between border-b border-luxuryGold/25 bg-zinc-950 px-4 py-3">
+          <div className="flex items-center gap-2">
+            <CountryFlag country={home.country} className="h-4 w-7" />
+            <span className="text-xs font-black uppercase tracking-widest text-white">{home.modelName}</span>
+          </div>
+          <span className="rounded-full bg-luxuryGold px-3 py-1 text-xs font-black text-black">VS</span>
+          <div className="flex items-center gap-2 text-right">
+            <span className="text-xs font-black uppercase tracking-widest text-white">{away.modelName}</span>
+            <CountryFlag country={away.country} className="h-4 w-7" />
+          </div>
+        </div>
+        <div className="relative grid grid-cols-2">
+          <MatchModelPanel team={home} />
+          <MatchModelPanel team={away} />
+          <div className="pointer-events-none absolute left-1/2 top-1/2 grid h-14 w-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-luxuryGold/70 bg-black/85 text-lg font-black text-white shadow-2xl">
+            VS
+          </div>
+        </div>
+        <div className="border-t border-luxuryGold/25 bg-black">
+          <VotingControls home={home} away={away} />
+        </div>
+      </div>
+      <div className="hidden md:grid md:grid-cols-[1fr_190px_1fr]">
         <MatchModelPanel team={home} />
-        <div className="col-span-2 grid place-content-center bg-black text-center md:col-span-1 md:order-none">
-          <p className="pt-4 text-[10px] font-bold uppercase tracking-[0.3em] text-luxuryGold md:pt-0">Group Stage</p>
-          <p className="my-1 text-3xl font-black md:my-2">VS</p>
+        <div className="grid place-content-center bg-black text-center">
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-luxuryGold">Group Stage</p>
+          <p className="my-2 text-3xl font-black">VS</p>
           <VotingControls home={home} away={away} />
         </div>
         <MatchModelPanel team={away} />
