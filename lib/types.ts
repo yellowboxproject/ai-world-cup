@@ -8,4 +8,5 @@ export type Nation = {
   number: number;
   votes: number;
   status: Status;
+  image?: string;
 };
