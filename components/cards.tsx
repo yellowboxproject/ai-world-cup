@@ -40,6 +40,34 @@ function countVotes(rows: Array<{ model_id: string }>, ids: string[]) {
   }, {});
 }
 
+function useVoteTotals(data: Nation[]) {
+  const [voteTotals, setVoteTotals] = useState<Record<string, number>>({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const rows = await fetchVoteRows("select=model_id");
+        const ids = data.map(modelId);
+        setVoteTotals(countVotes(rows, ids));
+      } catch {
+        setVoteTotals({});
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, [data]);
+
+  return { voteTotals, loading };
+}
+
+function enrichAndSort(data: Nation[], voteTotals: Record<string, number>) {
+  return [...data]
+    .map((nation) => ({ nation, votes: voteTotals[modelId(nation)] || 0 }))
+    .sort((a, b) => b.votes - a.votes || a.nation.country.localeCompare(b.nation.country));
+}
+
 export function HeroSection() {
   return (
     <section className="relative w-full overflow-hidden bg-black">
@@ -181,20 +209,15 @@ export function ModelProfileCard({ nation }: { nation: Nation }) {
   );
 }
 
-export function RankingTable({ data }: { data: Nation[] }) {
-  const [voteTotals, setVoteTotals] = useState<Record<string, number>>({});
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const rows = await fetchVoteRows("select=model_id");
-        const ids = data.map(modelId);
-        setVoteTotals(countVotes(rows, ids));
-      } catch {
-        setVoteTotals({});
-      }
-    };
-    load();
-  }, [data]);
+export function GlobalRankingTable({ data }: { data: Nation[] }) {
+  const { voteTotals, loading } = useVoteTotals(data);
+  const ranked = enrichAndSort(data, voteTotals);
+  return <div className="overflow-x-auto rounded-2xl gold-outline shadow-glow"><table className="min-w-full text-left text-sm"><thead className="bg-zinc-900"><tr><th className="p-3">Rank</th><th>Model</th><th>Nation</th><th>Group</th><th>Votes</th></tr></thead><tbody>{ranked.map(({ nation, votes }, i)=><tr key={nation.country} className="border-t border-white/10"><td className="p-3 font-black text-luxuryGold">#{i+1}</td><td className="font-bold text-white">{nation.modelName}</td><td>{nation.flag} {nation.country}</td><td>Group {nation.group}</td><td className="font-black text-white">{loading ? "..." : votes}</td></tr>)}</tbody></table></div>;
+}
 
-  return <div className="overflow-x-auto rounded-2xl gold-outline"><table className="min-w-full text-left text-sm"><thead className="bg-zinc-900"><tr><th className="p-3">Nation</th><th>W</th><th>L</th><th>Votes</th><th>Pts</th></tr></thead><tbody>{data.map((n, i)=>{const votes = voteTotals[modelId(n)] || 0; return <tr key={n.country} className="border-t border-white/10"><td className="p-3">{i+1}. {n.flag} {n.country}</td><td>0</td><td>0</td><td>{votes}</td><td>0</td></tr>;})}</tbody></table></div>;
+export function RankingTable({ data }: { data: Nation[] }) {
+  const { voteTotals, loading } = useVoteTotals(data);
+  const ranked = enrichAndSort(data, voteTotals);
+
+  return <div className="overflow-x-auto rounded-2xl gold-outline"><table className="min-w-full text-left text-sm"><thead className="bg-zinc-900"><tr><th className="p-3">Rank</th><th>Model / Nation</th><th>W</th><th>L</th><th>Votes</th><th>Pts</th></tr></thead><tbody>{ranked.map(({ nation, votes }, i)=><tr key={nation.country} className="border-t border-white/10"><td className="p-3 font-black text-luxuryGold">{i+1}</td><td>{nation.flag} <strong className="text-white">{nation.modelName}</strong> <span className="text-zinc-400">— {nation.country}</span></td><td>0</td><td>0</td><td className="font-black text-white">{loading ? "..." : votes}</td><td>0</td></tr>)}</tbody></table></div>;
 }
