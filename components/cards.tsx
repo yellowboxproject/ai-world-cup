@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import { Nation } from "@/lib/types";
 
 export function HeroSection() {
@@ -57,15 +58,58 @@ function MatchModelPanel({ team }: { team: Nation }) {
   );
 }
 
+function VotingControls({ home, away }: { home: Nation; away: Nation }) {
+  const matchId = useMemo(() => `${home.country}-${away.country}`.toLowerCase().replace(/[^a-z0-9]+/g, "-"), [home.country, away.country]);
+  const storageKey = `aiwc-votes-${matchId}`;
+  const votedKey = `aiwc-voted-${matchId}`;
+  const [votes, setVotes] = useState({ home: 0, away: 0 });
+  const [selected, setSelected] = useState<string | null>(null);
+
+  useEffect(() => {
+    const savedVotes = window.localStorage.getItem(storageKey);
+    const savedVote = window.localStorage.getItem(votedKey);
+    if (savedVotes) setVotes(JSON.parse(savedVotes));
+    if (savedVote) setSelected(savedVote);
+  }, [storageKey, votedKey]);
+
+  const vote = (side: "home" | "away") => {
+    if (selected) return;
+    const nextVotes = { ...votes, [side]: votes[side] + 1 };
+    setVotes(nextVotes);
+    setSelected(side);
+    window.localStorage.setItem(storageKey, JSON.stringify(nextVotes));
+    window.localStorage.setItem(votedKey, side);
+  };
+
+  return (
+    <div className="space-y-3 px-4 py-5 text-center">
+      <p className="text-xs uppercase tracking-widest text-luxuryGold">Vote for your favorite</p>
+      <div className="grid gap-2">
+        <button disabled={Boolean(selected)} onClick={() => vote("home")} className="rounded-full bg-gold-gradient px-4 py-2 text-xs font-black uppercase tracking-widest text-black transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-60">
+          Vote {home.modelName}
+        </button>
+        <button disabled={Boolean(selected)} onClick={() => vote("away")} className="rounded-full border border-luxuryGold/70 px-4 py-2 text-xs font-black uppercase tracking-widest text-luxuryGold transition hover:bg-luxuryGold hover:text-black disabled:cursor-not-allowed disabled:opacity-60">
+          Vote {away.modelName}
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-2 text-xs text-zinc-300">
+        <span>{home.modelName}: <strong className="text-white">{votes.home}</strong></span>
+        <span>{away.modelName}: <strong className="text-white">{votes.away}</strong></span>
+      </div>
+      {selected ? <p className="text-xs text-luxuryGold">Vote counted. Share this duel on Instagram or TikTok.</p> : null}
+    </div>
+  );
+}
+
 export function MatchCard({ home, away }: { home: Nation; away: Nation }) {
   return (
     <article className="gold-outline overflow-hidden rounded-3xl bg-black/80 p-0">
-      <div className="grid md:grid-cols-[1fr_160px_1fr]">
+      <div className="grid md:grid-cols-[1fr_190px_1fr]">
         <MatchModelPanel team={home} />
-        <div className="grid place-content-center bg-black px-5 py-6 text-center">
+        <div className="grid place-content-center bg-black text-center">
           <p className="text-xs uppercase tracking-widest text-luxuryGold">Group Stage</p>
-          <p className="my-3 text-3xl font-black">VS</p>
-          <button onClick={() => alert("Fan voting coming soon")} className="rounded-full bg-gold-gradient px-5 py-2 text-sm font-bold text-black transition hover:scale-105">Vote Now</button>
+          <p className="my-2 text-3xl font-black">VS</p>
+          <VotingControls home={home} away={away} />
         </div>
         <MatchModelPanel team={away} />
       </div>
@@ -94,5 +138,5 @@ export function ModelProfileCard({ nation }: { nation: Nation }) {
 }
 
 export function RankingTable({ data }: { data: Nation[] }) {
-  return <div className="overflow-x-auto rounded-2xl gold-outline"><table className="min-w-full text-left text-sm"><thead className="bg-zinc-900"><tr><th className="p-3">Nation</th><th>W</th><th>L</th><th>Votes</th><th>Pts</th></tr></thead><tbody>{data.map((n, i)=><tr key={n.country} className="border-t border-white/10"><td className="p-3">{i+1}. {n.flag} {n.country}</td><td>{(n.number%5)+1}</td><td>{n.number%3}</td><td>{n.votes}</td><td>{Math.floor(n.votes/5000)}</td></tr>)}</tbody></table></div>;
+  return <div className="overflow-x-auto rounded-2xl gold-outline"><table className="min-w-full text-left text-sm"><thead className="bg-zinc-900"><tr><th className="p-3">Nation</th><th>W</th><th>L</th><th>Votes</th><th>Pts</th></tr></thead><tbody>{data.map((n, i)=><tr key={n.country} className="border-t border-white/10"><td className="p-3">{i+1}. {n.flag} {n.country}</td><td>0</td><td>0</td><td>{n.votes}</td><td>0</td></tr>)}</tbody></table></div>;
 }
