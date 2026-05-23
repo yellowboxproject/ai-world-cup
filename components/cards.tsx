@@ -17,6 +17,16 @@ export function HeroSection() {
           className="object-contain object-center md:object-cover"
         />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent md:h-32" />
+        <Link
+          href="/groups"
+          aria-label="Enter the tournament"
+          className="absolute left-[13%] top-[76%] z-20 h-[8%] w-[18%] rounded-full outline-none transition hover:bg-luxuryGold/10 focus-visible:ring-2 focus-visible:ring-luxuryGold"
+        />
+        <Link
+          href="/matchups"
+          aria-label="View matchups"
+          className="absolute left-[33%] top-[76%] z-20 h-[8%] w-[16%] rounded-full outline-none transition hover:bg-luxuryGold/10 focus-visible:ring-2 focus-visible:ring-luxuryGold"
+        />
       </div>
     </section>
   );
