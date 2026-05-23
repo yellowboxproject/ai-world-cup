@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Footer, Header } from "@/components/layout";
+import { Footer, Header, MobileBottomNav } from "@/components/layout";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,6 +8,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         {children}
         <Footer />
+        <MobileBottomNav />
       </body>
     </html>
   );
