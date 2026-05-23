@@ -9,6 +9,70 @@ const competitionId = "ai_world_cup_2026";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+const flagCodes: Record<string, string> = {
+  Mexico: "mx",
+  "South Africa": "za",
+  "South Korea": "kr",
+  "Czech Republic": "cz",
+  Canada: "ca",
+  "Bosnia & Herzegovina": "ba",
+  Qatar: "qa",
+  Switzerland: "ch",
+  Brazil: "br",
+  Morocco: "ma",
+  Haiti: "ht",
+  Scotland: "gb-sct",
+  USA: "us",
+  Paraguay: "py",
+  Australia: "au",
+  Türkiye: "tr",
+  Germany: "de",
+  Curaçao: "cw",
+  "Côte d'Ivoire": "ci",
+  Ecuador: "ec",
+  Netherlands: "nl",
+  Japan: "jp",
+  Sweden: "se",
+  Tunisia: "tn",
+  Belgium: "be",
+  Egypt: "eg",
+  Iran: "ir",
+  "New Zealand": "nz",
+  Spain: "es",
+  "Cabo Verde": "cv",
+  "Saudi Arabia": "sa",
+  Uruguay: "uy",
+  France: "fr",
+  Senegal: "sn",
+  Iraq: "iq",
+  Norway: "no",
+  Argentina: "ar",
+  Algeria: "dz",
+  Austria: "at",
+  Jordan: "jo",
+  Portugal: "pt",
+  "DR Congo": "cd",
+  Uzbekistan: "uz",
+  Colombia: "co",
+  England: "gb-eng",
+  Croatia: "hr",
+  Ghana: "gh",
+  Panama: "pa"
+};
+
+function CountryFlag({ country, className = "h-4 w-6" }: { country: string; className?: string }) {
+  const code = flagCodes[country];
+  if (!code) return null;
+  return (
+    <img
+      src={`https://flagcdn.com/${code}.svg`}
+      alt={`${country} flag`}
+      className={`${className} inline-block rounded-[2px] object-cover shadow-sm ring-1 ring-white/20`}
+      loading="lazy"
+    />
+  );
+}
+
 function modelId(nation: Nation) {
   return `${nation.modelName}-${nation.country}`.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
@@ -88,11 +152,11 @@ export function NationCard({ nation }: { nation: Nation }) {
         <div className="relative h-64 bg-zinc-950">
           {nation.image ? <Image src={nation.image} alt={`${nation.modelName} — ${nation.country}`} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover object-top" /> : null}
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black to-transparent" />
-          <div className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-2xl backdrop-blur">{nation.flag}</div>
+          <div className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 backdrop-blur"><CountryFlag country={nation.country} className="h-5 w-8" /></div>
         </div>
         <div className="p-4">
           <h3 className="text-xl font-bold">{nation.modelName}</h3>
-          <p className="text-zinc-300">{nation.country}</p>
+          <p className="flex items-center gap-2 text-zinc-300"><CountryFlag country={nation.country} />{nation.country}</p>
           <span className="mt-3 inline-block rounded-full border border-luxuryGold/40 px-2 py-1 text-xs">{nation.status}</span>
         </div>
       </article>
@@ -106,7 +170,7 @@ function MatchModelPanel({ team }: { team: Nation }) {
       {team.image ? <Image src={team.image} alt={`${team.modelName} — ${team.country}`} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover object-top" /> : null}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
       <div className="absolute bottom-5 left-5 right-5">
-        <p className="text-3xl">{team.flag}</p>
+        <CountryFlag country={team.country} className="mb-2 h-7 w-11" />
         <h3 className="text-3xl font-black uppercase tracking-wide text-white">{team.modelName}</h3>
         <p className="text-luxuryGold">{team.country}</p>
       </div>
@@ -202,7 +266,7 @@ export function ModelProfileCard({ nation }: { nation: Nation }) {
       </div>
       <div className="p-4">
         <h3 className="text-xl font-bold">#{nation.number} {nation.modelName}</h3>
-        <p className="text-zinc-300">{nation.flag} {nation.country}</p>
+        <p className="flex items-center gap-2 text-zinc-300"><CountryFlag country={nation.country} />{nation.country}</p>
         <div className="mt-3 flex flex-wrap gap-2 text-xs">{["Captain Energy","Golden Smile","Street Star"].map((t)=><span key={t} className="rounded-full border border-luxuryGold/40 px-2 py-1">{t}</span>)}</div>
       </div>
     </article>
@@ -212,12 +276,12 @@ export function ModelProfileCard({ nation }: { nation: Nation }) {
 export function GlobalRankingTable({ data }: { data: Nation[] }) {
   const { voteTotals, loading } = useVoteTotals(data);
   const ranked = enrichAndSort(data, voteTotals);
-  return <div className="overflow-x-auto rounded-2xl gold-outline shadow-glow"><table className="min-w-full text-left text-sm"><thead className="bg-zinc-900"><tr><th className="p-3">Rank</th><th>Model</th><th>Nation</th><th>Group</th><th>Votes</th></tr></thead><tbody>{ranked.map(({ nation, votes }, i)=><tr key={nation.country} className="border-t border-white/10"><td className="p-3 font-black text-luxuryGold">#{i+1}</td><td className="font-bold text-white">{nation.modelName}</td><td>{nation.flag} {nation.country}</td><td>Group {nation.group}</td><td className="font-black text-white">{loading ? "..." : votes}</td></tr>)}</tbody></table></div>;
+  return <div className="overflow-x-auto rounded-2xl gold-outline shadow-glow"><table className="min-w-full text-left text-sm"><thead className="bg-zinc-900"><tr><th className="p-3">Rank</th><th>Model</th><th>Nation</th><th>Group</th><th>Votes</th></tr></thead><tbody>{ranked.map(({ nation, votes }, i)=><tr key={nation.country} className="border-t border-white/10"><td className="p-3 font-black text-luxuryGold">#{i+1}</td><td className="font-bold text-white">{nation.modelName}</td><td className="flex items-center gap-2 py-3"><CountryFlag country={nation.country} />{nation.country}</td><td>Group {nation.group}</td><td className="font-black text-white">{loading ? "..." : votes}</td></tr>)}</tbody></table></div>;
 }
 
 export function RankingTable({ data }: { data: Nation[] }) {
   const { voteTotals, loading } = useVoteTotals(data);
   const ranked = enrichAndSort(data, voteTotals);
 
-  return <div className="overflow-x-auto rounded-2xl gold-outline"><table className="min-w-full text-left text-sm"><thead className="bg-zinc-900"><tr><th className="p-3">Rank</th><th>Model / Nation</th><th>W</th><th>L</th><th>Votes</th><th>Pts</th></tr></thead><tbody>{ranked.map(({ nation, votes }, i)=><tr key={nation.country} className="border-t border-white/10"><td className="p-3 font-black text-luxuryGold">{i+1}</td><td>{nation.flag} <strong className="text-white">{nation.modelName}</strong> <span className="text-zinc-400">— {nation.country}</span></td><td>0</td><td>0</td><td className="font-black text-white">{loading ? "..." : votes}</td><td>0</td></tr>)}</tbody></table></div>;
+  return <div className="overflow-x-auto rounded-2xl gold-outline"><table className="min-w-full text-left text-sm"><thead className="bg-zinc-900"><tr><th className="p-3">Rank</th><th>Model / Nation</th><th>W</th><th>L</th><th>Votes</th><th>Pts</th></tr></thead><tbody>{ranked.map(({ nation, votes }, i)=><tr key={nation.country} className="border-t border-white/10"><td className="p-3 font-black text-luxuryGold">{i+1}</td><td><div className="flex items-center gap-2"><CountryFlag country={nation.country} /><strong className="text-white">{nation.modelName}</strong><span className="text-zinc-400">— {nation.country}</span></div></td><td>0</td><td>0</td><td className="font-black text-white">{loading ? "..." : votes}</td><td>0</td></tr>)}</tbody></table></div>;
 }
